@@ -1,0 +1,11 @@
+  {
+    "type": "record",
+    "name": "User",
+    "namespace": "org.apache.gora.examples.generated",
+    "fields" : [
+      {"name": "username", "type": "string"},
+      {"name": "firstname", "type": "string"},
+      {"name": "lastname", "type": "string"},
+      {"name": "password", "type": "string"}
+    ]
+  }
