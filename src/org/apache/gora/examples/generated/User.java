@@ -41,12 +41,11 @@ import org.apache.gora.persistency.ListGenericArray;
 
 @SuppressWarnings("all")
 public class User extends PersistentBase {
-  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"username\",\"type\":\"string\"},{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");
+  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");
   public static enum Field {
-    USERNAME(0,"username"),
-    FIRSTNAME(1,"firstname"),
-    LASTNAME(2,"lastname"),
-    PASSWORD(3,"password"),
+    FIRSTNAME(0,"firstname"),
+    LASTNAME(1,"lastname"),
+    PASSWORD(2,"password"),
     ;
     private int index;
     private String name;
@@ -55,11 +54,10 @@ public class User extends PersistentBase {
     public String getName() {return name;}
     public String toString() {return name;}
   };
-  public static final String[] _ALL_FIELDS = {"username","firstname","lastname","password",};
+  public static final String[] _ALL_FIELDS = {"firstname","lastname","password",};
   static {
     PersistentBase.registerFields(User.class, _ALL_FIELDS);
   }
-  private Utf8 username;
   private Utf8 firstname;
   private Utf8 lastname;
   private Utf8 password;
@@ -75,10 +73,9 @@ public class User extends PersistentBase {
   public Schema getSchema() { return _SCHEMA; }
   public Object get(int _field) {
     switch (_field) {
-    case 0: return username;
-    case 1: return firstname;
-    case 2: return lastname;
-    case 3: return password;
+    case 0: return firstname;
+    case 1: return lastname;
+    case 2: return password;
     default: throw new AvroRuntimeException("Bad index");
     }
   }
@@ -87,35 +84,28 @@ public class User extends PersistentBase {
     if(isFieldEqual(_field, _value)) return;
     getStateManager().setDirty(this, _field);
     switch (_field) {
-    case 0:username = (Utf8)_value; break;
-    case 1:firstname = (Utf8)_value; break;
-    case 2:lastname = (Utf8)_value; break;
-    case 3:password = (Utf8)_value; break;
+    case 0:firstname = (Utf8)_value; break;
+    case 1:lastname = (Utf8)_value; break;
+    case 2:password = (Utf8)_value; break;
     default: throw new AvroRuntimeException("Bad index");
     }
   }
-  public Utf8 getUsername() {
+  public Utf8 getFirstname() {
     return (Utf8) get(0);
   }
-  public void setUsername(Utf8 value) {
+  public void setFirstname(Utf8 value) {
     put(0, value);
   }
-  public Utf8 getFirstname() {
+  public Utf8 getLastname() {
     return (Utf8) get(1);
   }
-  public void setFirstname(Utf8 value) {
+  public void setLastname(Utf8 value) {
     put(1, value);
   }
-  public Utf8 getLastname() {
+  public Utf8 getPassword() {
     return (Utf8) get(2);
   }
-  public void setLastname(Utf8 value) {
-    put(2, value);
-  }
-  public Utf8 getPassword() {
-    return (Utf8) get(3);
-  }
   public void setPassword(Utf8 value) {
-    put(3, value);
+    put(2, value);
   }
 }
