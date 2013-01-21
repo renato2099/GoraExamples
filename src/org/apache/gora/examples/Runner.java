@@ -57,7 +57,10 @@ public class Runner {
     try {
       userStore = createDataStore(String.class, User.class);
       User usr = userStore.get("pcmcfadin");
-      System.out.println(usr.getFirstname());
+      if(usr != null)
+        System.out.println(usr.getFirstname());
+      else
+        System.out.println("Null object.");
     } catch (GoraException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
