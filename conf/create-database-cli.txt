@@ -1,0 +1,23 @@
+create keyspace Killrvideo
+with strategy_options = {replication_factor:1}
+and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
+use Killrvideo;
+
+create column family users with
+  comparator = UTF8Type and
+  column_metadata =
+  [
+    {column_name: firstname, validation_class: UTF8Type},
+    {column_name: lastname, validation_class: UTF8Type},
+    {column_name: password, validation_class: UTF8Type}
+  ];
+
+create column family aliens with
+  comparator = UTF8Type and
+  column_metadata =
+  [
+    {column_name: firstname, validation_class: UTF8Type},
+    {column_name: lastname, validation_class: UTF8Type},
+    {column_name: password, validation_class: UTF8Type}
+    {column_name: telephone, validation_class: UTF8Type}
+  ];

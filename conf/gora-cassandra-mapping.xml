@@ -21,12 +21,20 @@
 
   <keyspace name="Killrvideo" host="localhost" cluster="Test Cluster">
     <family name="users"/>
+    <family name="aliens"/>
   </keyspace>
 
   <class name="org.apache.gora.examples.generated.User" keyClass="java.lang.String" keyspace="Killrvideo">
     <field name="firstname" family="users" qualifier="firstname"/>
     <field name="lastname" family="users" qualifier="lastname"/>
     <field name="password" family="users" qualifier="password"/>
+  </class>
+
+  <class name="org.apache.gora.examples.generated.Alien" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="firstname" family="aliens" qualifier="firstname"/>
+    <field name="lastname" family="aliens" qualifier="lastname"/>
+    <field name="password" family="aliens" qualifier="password"/>
+    <field name="telephone" family="aliens" qualifier="telephone"/>
   </class>
 
 </gora-orm>
