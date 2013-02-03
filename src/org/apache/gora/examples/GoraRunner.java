@@ -17,11 +17,13 @@
  */
 package org.apache.gora.examples;
 
+import java.nio.ByteBuffer;
 import java.util.HashSet;
 
 import org.apache.avro.util.Utf8;
 import org.apache.gora.cassandra.store.CassandraStore;
 import org.apache.gora.dynamodb.store.DynamoDBStore;
+import org.apache.gora.examples.generated.Alien;
 import org.apache.gora.examples.generated.User;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.store.DataStore;
@@ -33,12 +35,14 @@ import org.apache.hadoop.conf.Configuration;
  * @author renatomarroquin
  *
  */
-public class Runner {
+public class GoraRunner {
 
   /**
    * Data store to handle user storage
    */
   protected static DataStore<String,User> userStore;
+  
+  protected static DataStore<String,Alien> alienStore;
   
   private static Configuration conf;
 
@@ -53,27 +57,88 @@ public class Runner {
 
     String dataStoreName = "Cassandra";
     dataStoreClass = getSpecificDataStore(dataStoreName);
+
     try {
-      userStore = createDataStore(String.class, User.class);
-      User usr = userStore.get("pmcfadin");
-      if(usr != null)
-        System.out.println(usr.getFirstname());
-      else
-        System.out.println("Null object.");
 
-      usr = new User();
-      usr.setFirstname(new Utf8("Renato"));
-      userStore.put("renatoj.marroquin", usr);
+      // Creating data stores
+      //userStore = createDataStore(String.class, User.class);
+      alienStore = createDataStore(String.class, Alien.class);
 
-      usr = userStore.get("renatoj.marroquin");
-      System.out.println(usr.getFirstname());
+      // Performing requests
+      putRequests();
+      getRequests();
 
-      userStore.flush();
-      userStore.close();
+      // Closing Alien data store
+      alienStore.close();
+
+      // Closing User data store
+      //userStore.flush();
+      //userStore.close();
 
     } catch (GoraException e) {
       e.printStackTrace();
     }
+
+  }
+
+  private static void getRequests(){
+    //userGetOperations();
+    alienGetOperations();
+  }
+  
+  private static void putRequests(){
+    //userPutRequests();
+    alienPutRequests();
+  }
+  
+  private static void userPutRequests(){
+    // Adding a new user
+    User usr = new User();
+    usr.setFirstname(new Utf8("Renato"));
+    userStore.put("renatoj.marroquin", usr);
+  }
+
+  private static void alienPutRequests(){
+    // Adding a new alien
+    Alien alen = new Alien();
+    alen.setFirstname(new Utf8("chewbacca"));
+    alen.setLastname(new Utf8("sobaka"));
+    alen.setPassword(new Utf8("chewie"));
+    //alen.setTelephone(new Utf8("247548"));
+    alen.setTelephone( ByteBuffer.wrap("247548".getBytes()) );
+    alienStore.put("chewbacca.sobaka", alen);
+
+    // Flushing down operations
+    alienStore.flush();
+  }
+
+  private static void alienGetOperations(){
+    // Retrieving first alien
+    Alien alen = alienStore.get("chewbacca.sobaka");
+    if (alen.getTelephone() instanceof Utf8)
+      System.out.println(alen.getTelephone());
+    if (alen.getTelephone() instanceof ByteBuffer){
+      byte[] bytearr = new byte[((ByteBuffer)alen.getTelephone()).remaining()];
+      ((ByteBuffer)alen.getTelephone()).get(bytearr);
+      System.out.println(new String(bytearr));
+    }
+    if (alen != null)
+      System.out.println(alen.getFirstname());
+    else
+      System.out.println("Alien hasn't been found.");
+  }
+  
+  private static void userGetOperations(){
+    // Retrieving first user
+    User usr = userStore.get("pmcfadin");
+    if(usr != null)
+      System.out.println(usr.getFirstname());
+    else
+      System.out.println("User hasn't been object.");
+    
+    // Retrieving second user
+    usr = userStore.get("renatoj.marroquin");
+    System.out.println(usr.getFirstname());
   }
 
   /**
