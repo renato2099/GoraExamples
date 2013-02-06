@@ -40,8 +40,8 @@ import org.apache.gora.persistency.StatefulHashMap;
 import org.apache.gora.persistency.ListGenericArray;
 
 @SuppressWarnings("all")
-public class Alien extends PersistentBase {
-  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"Alien\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"},{\"name\":\"telephone\",\"type\":[\"string\",\"bytes\"]},{\"name\":\"telephoneUnionIndex\",\"type\":\"int\"}]}");
+public class Simpson extends PersistentBase {
+  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"Simpson\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"},{\"name\":\"telephone\",\"type\":[\"null\",\"string\",\"int\"]},{\"name\":\"telephoneUnionIndex\",\"type\":\"int\"}]}");
   public static enum Field {
     FIRSTNAME(0,"firstname"),
     LASTNAME(1,"lastname"),
@@ -58,21 +58,21 @@ public class Alien extends PersistentBase {
   };
   public static final String[] _ALL_FIELDS = {"firstname","lastname","password","telephone","telephoneUnionIndex",};
   static {
-    PersistentBase.registerFields(Alien.class, _ALL_FIELDS);
+    PersistentBase.registerFields(Simpson.class, _ALL_FIELDS);
   }
   private Utf8 firstname;
   private Utf8 lastname;
   private Utf8 password;
   private Object telephone;
   private Integer telephoneUnionIndex;
-  public Alien() {
+  public Simpson() {
     this(new StateManagerImpl());
   }
-  public Alien(StateManager stateManager) {
+  public Simpson(StateManager stateManager) {
     super(stateManager);
   }
-  public Alien newInstance(StateManager stateManager) {
-    return new Alien(stateManager);
+  public Simpson newInstance(StateManager stateManager) {
+    return new Simpson(stateManager);
   }
   public Schema getSchema() { return _SCHEMA; }
   public Object get(int _field) {
@@ -122,7 +122,7 @@ public class Alien extends PersistentBase {
   public void setTelephone(Utf8 value) {
     put(3, value);
   }
-  public void setTelephone(ByteBuffer value) {
+  public void setTelephone(Integer value) {
     put(3, value);
   }
   public Integer getTelephoneUnionIndex() {

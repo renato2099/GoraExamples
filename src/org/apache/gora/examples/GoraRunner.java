@@ -24,6 +24,7 @@ import org.apache.avro.util.Utf8;
 import org.apache.gora.cassandra.store.CassandraStore;
 import org.apache.gora.dynamodb.store.DynamoDBStore;
 import org.apache.gora.examples.generated.Alien;
+import org.apache.gora.examples.generated.Simpson;
 import org.apache.gora.examples.generated.User;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.store.DataStore;
@@ -43,7 +44,9 @@ public class GoraRunner {
   protected static DataStore<String,User> userStore;
   
   protected static DataStore<String,Alien> alienStore;
-  
+
+  protected static DataStore<String,Simpson> simpsonStore;
+
   private static Configuration conf;
 
   protected static HashSet<DataStore> dataStores = new HashSet();
@@ -62,14 +65,16 @@ public class GoraRunner {
 
       // Creating data stores
       //userStore = createDataStore(String.class, User.class);
-      alienStore = createDataStore(String.class, Alien.class);
+      //alienStore = createDataStore(String.class, Alien.class);
+      simpsonStore = createDataStore(String.class, Simpson.class);
 
       // Performing requests
       putRequests();
       getRequests();
 
       // Closing Alien data store
-      alienStore.close();
+      //alienStore.close();
+      simpsonStore.close();
 
       // Closing User data store
       //userStore.flush();
@@ -82,13 +87,17 @@ public class GoraRunner {
   }
 
   private static void getRequests(){
+    System.out.println("Performing get requests");
     //userGetOperations();
-    alienGetOperations();
+    //alienGetOperations();
+    simpsonGetOperations();
   }
   
   private static void putRequests(){
+    System.out.println("Performing put requests");
     //userPutRequests();
-    alienPutRequests();
+    //alienPutRequests();
+    simpsonPutRequests();
   }
   
   private static void userPutRequests(){
@@ -96,6 +105,19 @@ public class GoraRunner {
     User usr = new User();
     usr.setFirstname(new Utf8("Renato"));
     userStore.put("renatoj.marroquin", usr);
+  }
+
+  private static void simpsonPutRequests(){
+    // Adding a new simpson
+    Simpson bSimpson = new Simpson();
+    bSimpson.setFirstname(new Utf8("bart"));
+    bSimpson.setLastname(new Utf8("simpson"));
+    bSimpson.setPassword(new Utf8("bart123"));
+    //alen.setTelephone(new Utf8("247548"));
+    Integer phone = new Integer("247548");
+    bSimpson.setTelephone(phone);
+    simpsonStore.put("bart.simpson", bSimpson);
+    simpsonStore.flush();
   }
 
   private static void alienPutRequests(){
@@ -110,6 +132,20 @@ public class GoraRunner {
 
     // Flushing down operations
     alienStore.flush();
+  }
+
+  private static void simpsonGetOperations(){
+    // Retrieving first alien
+    Simpson bSimpson = simpsonStore.get("bart.simpson");
+    if (bSimpson.getTelephone() != null)
+      System.out.println(bSimpson.getTelephone());
+    else
+      System.out.println("No telephone registered.");
+    
+    if (bSimpson != null)
+      System.out.println(bSimpson.getFirstname());
+    else
+      System.out.println("Simpson hasn't been found.");
   }
 
   private static void alienGetOperations(){
