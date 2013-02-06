@@ -37,4 +37,11 @@
     <field name="telephone" family="aliens" qualifier="telephone"/>
   </class>
 
+  <class name="org.apache.gora.examples.generated.Simpson" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="firstname" family="simpsons" qualifier="firstname"/>
+    <field name="lastname" family="simpsons" qualifier="lastname"/>
+    <field name="password" family="simpsons" qualifier="password"/>
+    <field name="telephone" family="simpsons" qualifier="telephone"/>
+  </class>
+  
 </gora-orm>

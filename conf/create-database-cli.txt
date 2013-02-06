@@ -21,3 +21,13 @@ create column family aliens with
     {column_name: password, validation_class: UTF8Type}
     {column_name: telephone, validation_class: UTF8Type}
   ];
+  
+create column family simpsons with
+  comparator = UTF8Type and
+  column_metadata =
+  [
+    {column_name: firstname, validation_class: UTF8Type},
+    {column_name: lastname, validation_class: UTF8Type},
+    {column_name: password, validation_class: UTF8Type}
+    {column_name: telephone, validation_class: BytesType}
+  ];
