@@ -39,6 +39,12 @@ import org.apache.gora.persistency.impl.StateManagerImpl;
 import org.apache.gora.persistency.StatefulHashMap;
 import org.apache.gora.persistency.ListGenericArray;
 
+
+/**
+ * User describes one of the most common Database entries. Each User may have only 
+ * a first and last name and a password.
+ * @author rmarroquin
+ */
 @SuppressWarnings("all")
 public class User extends PersistentBase {
   public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");

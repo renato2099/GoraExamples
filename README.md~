@@ -1,0 +1,9 @@
+GoraExamples
+============
+
+This project presents examples of how to use Apache Gora with different data stores.
+Currently examples cater for the following
+
+* gora-core (AvroStore, DataFileAvroStore, MemStore) 
+* gora-cassandra (CassandraStore)
+* gora-dynamodb (DynamoDBStore)
