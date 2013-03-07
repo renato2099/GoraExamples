@@ -33,6 +33,11 @@ import org.apache.gora.util.GoraException;
 import org.apache.hadoop.conf.Configuration;
 
 /**
+ * GoraRunner enables us to create a {@link DataStore} via 
+ * {@link DataStoreFactory#createDataStore(Class, Class, Class, Configuration)}, then 
+ * executes puts (writes first and last name, passwsord and telephone number) and gets 
+ * (retrieves) the data we previously persisted.
+ * We then close the data store using {@link DataStore#close()}.
  * @author renatomarroquin
  *
  */
