@@ -140,17 +140,21 @@ public class GoraRunner {
   }
 
   private static void simpsonGetOperations(){
-    // Retrieving first alien
+    // Retrieving bSimpson
     Simpson bSimpson = simpsonStore.get("bart.simpson");
-    if (bSimpson.getTelephone() != null)
+    if (bSimpson.getTelephone() != null){
       System.out.println(bSimpson.getTelephone());
-    else
+    } else {
       System.out.println("No telephone registered.");
-    
-    if (bSimpson != null)
+    }
+    if (bSimpson != null) {
       System.out.println(bSimpson.getFirstname());
-    else
+      System.out.println(bSimpson.getLastname());
+      System.out.println(bSimpson.getPassword());
+      System.out.println(bSimpson.getTelephone());
+    } else {
       System.out.println("Simpson hasn't been found.");
+    }
   }
 
   private static void alienGetOperations(){

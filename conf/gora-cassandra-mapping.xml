@@ -22,6 +22,7 @@
   <keyspace name="Killrvideo" host="localhost" cluster="Test Cluster">
     <family name="users"/>
     <family name="aliens"/>
+    <family name="simpsons"/>
   </keyspace>
 
   <class name="org.apache.gora.examples.generated.User" keyClass="java.lang.String" keyspace="Killrvideo">
