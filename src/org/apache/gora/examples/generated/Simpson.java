@@ -49,13 +49,12 @@ import org.apache.gora.persistency.ListGenericArray;
  */
 @SuppressWarnings("all")
 public class Simpson extends PersistentBase {
-  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"Simpson\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"},{\"name\":\"telephone\",\"type\":[\"null\",\"string\",\"int\"]},{\"name\":\"telephoneUnionIndex\",\"type\":\"int\"}]}");
+  public static final Schema _SCHEMA = Schema.parse("{\"type\":\"record\",\"name\":\"Simpson\",\"namespace\":\"org.apache.gora.examples.generated\",\"fields\":[{\"name\":\"firstname\",\"type\":\"string\"},{\"name\":\"lastname\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"},{\"name\":\"telephone\",\"type\":[\"string\",\"null\"]}]}");
   public static enum Field {
     FIRSTNAME(0,"firstname"),
     LASTNAME(1,"lastname"),
     PASSWORD(2,"password"),
     TELEPHONE(3,"telephone"),
-    TELEPHONEUNIONINDEX(4,"telephoneUnionIndex"),
     ;
     private int index;
     private String name;
@@ -64,68 +63,33 @@ public class Simpson extends PersistentBase {
     public String getName() {return name;}
     public String toString() {return name;}
   };
-  /**
-   * Simply states the static fields provided by the Simpson Avro Schema.
-   */
-  public static final String[] _ALL_FIELDS = {"firstname","lastname","password","telephone","telephoneUnionIndex",};
+  public static final String[] _ALL_FIELDS = {"firstname","lastname","password","telephone",};
   static {
     PersistentBase.registerFields(Simpson.class, _ALL_FIELDS);
   }
   private Utf8 firstname;
   private Utf8 lastname;
   private Utf8 password;
-  private Object telephone;
-  private Integer telephoneUnionIndex;
+  private Utf8 telephone;
   public Simpson() {
     this(new StateManagerImpl());
   }
-
-  /**
-   * Default constructor.
-   * @param stateManager the {@link StateManager} used to manage state of fields.
-   */
   public Simpson(StateManager stateManager) {
     super(stateManager);
   }
-  
-  /**
-   * Create a new instance of the {@link Simpson} class.
-   * @param stateManager will be used to track state within the instance.
-   */
   public Simpson newInstance(StateManager stateManager) {
     return new Simpson(stateManager);
   }
-  
-  /**
-   * Get the Schema associated with the {@link Simpson}.
-   * @return the schema
-   */
   public Schema getSchema() { return _SCHEMA; }
-  
-  /**
-   * Get an {@link Object} field.
-   * @param _field the field we wish to obtain a value for
-   * @return the _field {@link Object}.
-   * @throws {@link AvroRuntimeException}
-   */
   public Object get(int _field) {
     switch (_field) {
     case 0: return firstname;
     case 1: return lastname;
     case 2: return password;
     case 3: return telephone;
-    case 4: return telephoneUnionIndex;
     default: throw new AvroRuntimeException("Bad index");
     }
   }
-  
-  /**
-   * Put an {@link Object} into some field within {@link Simpson}.
-   * @param _field the field we wish to persist as value to.
-   * @param _value the value we wish to associate with the _field.
-   * @throws {@link AvroRuntimeException}.
-   *
-   */
   @SuppressWarnings(value="unchecked")
   public void put(int _field, Object _value) {
     if(isFieldEqual(_field, _value)) return;
@@ -134,97 +98,32 @@ public class Simpson extends PersistentBase {
     case 0:firstname = (Utf8)_value; break;
     case 1:lastname = (Utf8)_value; break;
     case 2:password = (Utf8)_value; break;
-    case 3:telephone = (Object)_value; break;
-    case 4:telephoneUnionIndex = (Integer)_value; break;
+    case 3:telephone = (Utf8)_value; break;
     default: throw new AvroRuntimeException("Bad index");
     }
   }
-  
-  /**
-   * Get the first name associated with a Simpson
-   * @return first name
-   */
   public Utf8 getFirstname() {
     return (Utf8) get(0);
   }
-  
-  /**
-   * Set the first name for an Simpson
-   * @param value the {@link Utf8} value to set.
-   */
   public void setFirstname(Utf8 value) {
     put(0, value);
   }
-  
-  /**
-   * Get the last name associated with a Simpson
-   * @return last name
-   */
   public Utf8 getLastname() {
     return (Utf8) get(1);
   }
-  
-  /**
-   * Set the last name for a Simpson
-   * @param value the {@link Utf8} value to set.
-   */
   public void setLastname(Utf8 value) {
     put(1, value);
   }
-  
-  /**
-   * Get the password associated with a Simpson
-   * @return password
-   */
   public Utf8 getPassword() {
     return (Utf8) get(2);
   }
-  
-  /**
-   * Set the password for a Simpson
-   * @param value the {@link Utf8} value to set.
-   */
   public void setPassword(Utf8 value) {
     put(2, value);
   }
-
-  /**
-   * Get the telephone number associated with a Simpson
-   * @return telephone number
-   */
-  public Object getTelephone() {
-    return (Object) get(3);
+  public Utf8 getTelephone() {
+    return (Utf8) get(3);
   }
-  
-  /**
-   * Set the telephone number for a Simpson
-   * @param value the {@link Utf8} value to set.
-   */
   public void setTelephone(Utf8 value) {
     put(3, value);
-  }
-  
-  /**
-   * Set the telephone number for a Simpson
-   * @param value the {@link Integer} value to set.
-   */
-  public void setTelephone(Integer value) {
-    put(3, value);
-  }
-  
-  /**
-   * Get the Union index associated with the telephone number for a Simpson
-   * @return index number
-   */
-  public Integer getTelephoneUnionIndex() {
-    return (Integer) get(4);
-  }
-  
-  /**
-   * Set the index telephone number for a Simpson
-   * @param value the {@link Integer} value to set.
-   */
-  public void setTelephoneUnionIndex(Integer value) {
-    put(4, value);
   }
 }

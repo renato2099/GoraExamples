@@ -39,7 +39,6 @@ import org.apache.gora.persistency.impl.StateManagerImpl;
 import org.apache.gora.persistency.StatefulHashMap;
 import org.apache.gora.persistency.ListGenericArray;
 
-
 /**
  * User describes one of the most common Database entries. Each User may have only 
  * a first and last name and a password.

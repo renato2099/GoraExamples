@@ -63,10 +63,6 @@ public class Alien extends PersistentBase {
     public String getName() {return name;}
     public String toString() {return name;}
   };
-  
-  /**
-   * Simply states the static fields provided by the Alien Avro Schema.
-   */
   public static final String[] _ALL_FIELDS = {"firstname","lastname","password","telephone","telephoneUnionIndex",};
   static {
     PersistentBase.registerFields(Alien.class, _ALL_FIELDS);
@@ -79,35 +75,13 @@ public class Alien extends PersistentBase {
   public Alien() {
     this(new StateManagerImpl());
   }
-  
-  /**
-   * Default constructor.
-   * @param stateManager the {@link StateManager} used to manage state of fields.
-   */
   public Alien(StateManager stateManager) {
     super(stateManager);
   }
-  
-  /**
-   * Create a new instance of the {@link Alien} class.
-   * @param stateManager will be used to track state within the instance.
-   */
   public Alien newInstance(StateManager stateManager) {
     return new Alien(stateManager);
   }
-  
-  /**
-   * Get the Schema associated with the {@link Alien}.
-   * @return the schema
-   */
   public Schema getSchema() { return _SCHEMA; }
-  
-  /**
-   * Get an {@link Object} field.
-   * @param _field the field we wish to obtain a value for
-   * @return the _field {@link Object}.
-   * @throws {@link AvroRuntimeException}
-   */
   public Object get(int _field) {
     switch (_field) {
     case 0: return firstname;
@@ -118,14 +92,6 @@ public class Alien extends PersistentBase {
     default: throw new AvroRuntimeException("Bad index");
     }
   }
-  
-  /**
-   * Put an {@link Object} into some field within {@link Alien}.
-   * @param _field the field we wish to persist as value to.
-   * @param _value the value we wish to associate with the _field.
-   * @throws {@link AvroRuntimeException}.
-   *
-   */
   @SuppressWarnings(value="unchecked")
   public void put(int _field, Object _value) {
     if(isFieldEqual(_field, _value)) return;
@@ -139,91 +105,36 @@ public class Alien extends PersistentBase {
     default: throw new AvroRuntimeException("Bad index");
     }
   }
-  
-  /**
-   * Get the first name associated with an Alien
-   * @return first name
-   */
   public Utf8 getFirstname() {
     return (Utf8) get(0);
   }
-  
-  /**
-   * Set the first name for an Alien
-   * @param value the {@link Utf8} value to set.
-   */
   public void setFirstname(Utf8 value) {
     put(0, value);
   }
-  
-  /**
-   * Get the last name associated with an Alien
-   * @return last name
-   */
   public Utf8 getLastname() {
     return (Utf8) get(1);
   }
-  
-  /**
-   * Set the last name for an Alien
-   * @param value the {@link Utf8} value to set.
-   */
   public void setLastname(Utf8 value) {
     put(1, value);
   }
-  
-  /**
-   * Get the password associated with an Alien
-   * @return password
-   */
   public Utf8 getPassword() {
     return (Utf8) get(2);
   }
-  
-  /**
-   * Set the password for an Alien
-   * @param value the {@link Utf8} value to set.
-   */
   public void setPassword(Utf8 value) {
     put(2, value);
   }
-  
-  /**
-   * Get the telephone number associated with an Alien
-   * @return telephone number
-   */
   public Object getTelephone() {
     return (Object) get(3);
   }
-  
-  /**
-   * Set the telephone number for an Alien
-   * @param value the {@link Utf8} value to set.
-   */
   public void setTelephone(Utf8 value) {
     put(3, value);
   }
-  
-  /**
-   * Set the telephone number for an Alien
-   * @param value the {@link ByteBuffer} value to set.
-   */
   public void setTelephone(ByteBuffer value) {
     put(3, value);
   }
-  
-  /**
-   * Get the Union index associated with the telephone number for an Alien
-   * @return index number
-   */
   public Integer getTelephoneUnionIndex() {
     return (Integer) get(4);
   }
-  
-  /**
-   * Set the index telephone number for an Alien
-   * @param value the {@link Integer} value to set.
-   */
   public void setTelephoneUnionIndex(Integer value) {
     put(4, value);
   }

@@ -29,5 +29,5 @@ create column family simpsons with
     {column_name: firstname, validation_class: UTF8Type},
     {column_name: lastname, validation_class: UTF8Type},
     {column_name: password, validation_class: UTF8Type}
-    {column_name: telephone, validation_class: BytesType}
+    {column_name: telephone, validation_class: UTF8Type}
   ];

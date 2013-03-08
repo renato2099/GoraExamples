@@ -18,7 +18,7 @@
 package org.apache.gora.examples;
 
 import java.nio.ByteBuffer;
-import java.util.HashSet;
+import java.util.HashMap;
 
 import org.apache.avro.util.Utf8;
 import org.apache.gora.cassandra.store.CassandraStore;
@@ -27,6 +27,7 @@ import org.apache.gora.examples.generated.Alien;
 import org.apache.gora.examples.generated.Simpson;
 import org.apache.gora.examples.generated.User;
 import org.apache.gora.persistency.Persistent;
+import org.apache.gora.persistency.impl.PersistentBase;
 import org.apache.gora.store.DataStore;
 import org.apache.gora.store.DataStoreFactory;
 import org.apache.gora.util.GoraException;
@@ -41,91 +42,105 @@ import org.apache.hadoop.conf.Configuration;
  * @author renatomarroquin
  *
  */
-public class GoraRunner {
+public class GoraRunner<K, T extends PersistentBase> {
 
   /**
    * Data store to handle user storage
    */
-  protected static DataStore<String,User> userStore;
-  
-  protected static DataStore<String,Alien> alienStore;
-
-  protected static DataStore<String,Simpson> simpsonStore;
+  protected static HashMap<String, DataStore> dataStores = new HashMap<String, DataStore>();
 
   private static Configuration conf;
 
-  protected static HashSet<DataStore> dataStores = new HashSet();
-
   protected static Class<? extends DataStore> dataStoreClass;
 
+  protected Class<K> keyClass;
+  protected Class<T> persistentClass;
+  
   /**
    * @param args
    */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public static void main(String[] args) {
 
-    String dataStoreName = "Cassandra";
-    dataStoreClass = getSpecificDataStore(dataStoreName);
-
+    String dataStoreType = "Cassandra";
+    GoraRunner gr = new GoraRunner();
+    
     try {
 
       // Creating data stores
-      //userStore = createDataStore(String.class, User.class);
-      //alienStore = createDataStore(String.class, Alien.class);
-      simpsonStore = createDataStore(String.class, Simpson.class);
+      //createSpecificDataStore("userStore", dataStoreType, String.class, User.class);
+      //createSpecificDataStore("alienStore", dataStoreType, String.class, Alien.class);
+      createSpecificDataStore("simpsonStore", dataStoreType, String.class, Simpson.class);
 
-      // Performing requests
-      putRequests();
-      getRequests();
+      
+      // Performing requests Simpson's requests
+      gr.putRequests("simpsonStore", gr.createKey("bart.simpson"), gr.createSimpson());
+      verifySimpson((Simpson)gr.getRequests("simpsonStore", gr.createKey("bart.simpson")));
 
-      // Closing Alien data store
-      //alienStore.close();
-      simpsonStore.close();
-
-      // Closing User data store
-      //userStore.flush();
-      //userStore.close();
+      // Performing requests Alien's requests
+      //gr.putRequests("simpsonStore", gr.createKey("chewbacca.sobaka"), gr.createAlien());
+      
+      // Performing requests User's requests
+      //usr = userStore.get("renatoj.marroquin");
+      //usr = userStore.get("pmcfadin");
+      //gr.putRequests("userStore", gr.createKey("renatoj.marroquin"), gr.createUser());
 
     } catch (GoraException e) {
       e.printStackTrace();
     }
 
   }
+  
+  private K createKey(String pKey){
+    return (K) pKey;
+  }
+  
+  private static <K, T extends Persistent> DataStore<K,T>
+   createSpecificDataStore(String pDataStoreName, String pDataStoreType, Class<K> keyClass, Class<T> persistentClass) throws GoraException {
+    // Getting the specific data store
+    dataStoreClass = getSpecificDataStore(pDataStoreType);
+    DataStore<K,T> dataStore = createDataStore(keyClass, persistentClass);
+    // Setting the recently created data store into a centralized structure
+    if (dataStore != null)
+      dataStores.put(pDataStoreName, dataStore);
+    // Returning the data store created
+    return dataStore;
+  }
 
-  private static void getRequests(){
-    System.out.println("Performing get requests");
-    //userGetOperations();
-    //alienGetOperations();
-    simpsonGetOperations();
+  private Object getRequests(String pDataStoreName, K pKey){
+    System.out.println("Performing get requests for " + pDataStoreName);
+    DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
+    Object obj = dataStore.get(pKey);
+    return obj;
   }
-  
-  private static void putRequests(){
-    System.out.println("Performing put requests");
-    //userPutRequests();
-    //alienPutRequests();
-    simpsonPutRequests();
+
+  private void putRequests(String pDataStoreName, K pKey, T pValue){
+    System.out.println("Performing put requests for " + pDataStoreName);
+    DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
+    dataStore.put(pKey, pValue);
+    dataStore.flush();
   }
-  
-  private static void userPutRequests(){
+
+  private User createUser(){
     // Adding a new user
     User usr = new User();
     usr.setFirstname(new Utf8("Renato"));
-    userStore.put("renatoj.marroquin", usr);
+    return usr;
   }
 
-  private static void simpsonPutRequests(){
+  private Simpson createSimpson(){
     // Adding a new simpson
     Simpson bSimpson = new Simpson();
     bSimpson.setFirstname(new Utf8("bart"));
     bSimpson.setLastname(new Utf8("simpson"));
     bSimpson.setPassword(new Utf8("bart123"));
-    //alen.setTelephone(new Utf8("247548"));
-    Integer phone = new Integer("247548");
-    bSimpson.setTelephone(phone);
-    simpsonStore.put("bart.simpson", bSimpson);
-    simpsonStore.flush();
+    bSimpson.setTelephone(new Utf8("247548"));
+    //bSimpson.setTelephone(null);
+    
+    return bSimpson;
   }
 
-  private static void alienPutRequests(){
+  private Alien createAlien(){
     // Adding a new alien
     Alien alen = new Alien();
     alen.setFirstname(new Utf8("chewbacca"));
@@ -133,53 +148,44 @@ public class GoraRunner {
     alen.setPassword(new Utf8("chewie"));
     //alen.setTelephone(new Utf8("247548"));
     alen.setTelephone( ByteBuffer.wrap("247548".getBytes()) );
-    alienStore.put("chewbacca.sobaka", alen);
 
-    // Flushing down operations
-    alienStore.flush();
+    return alen;
   }
 
-  private static void simpsonGetOperations(){
-    // Retrieving first alien
-    Simpson bSimpson = simpsonStore.get("bart.simpson");
-    if (bSimpson.getTelephone() != null)
-      System.out.println(bSimpson.getTelephone());
-    else
-      System.out.println("No telephone registered.");
-    
-    if (bSimpson != null)
-      System.out.println(bSimpson.getFirstname());
+  private static void verifySimpson(Simpson pSimpson){
+    if (pSimpson != null){
+      System.out.println(pSimpson.toString());
+      if (pSimpson.getTelephone() != null)
+        System.out.println("There was a telephone registered.");
+      else
+        System.out.println("No telephone registered.");
+    }
     else
       System.out.println("Simpson hasn't been found.");
   }
 
-  private static void alienGetOperations(){
+  private static void verifyAlien(Alien alen){
     // Retrieving first alien
-    Alien alen = alienStore.get("chewbacca.sobaka");
-    if (alen.getTelephone() instanceof Utf8)
-      System.out.println(alen.getTelephone());
-    if (alen.getTelephone() instanceof ByteBuffer){
-      byte[] bytearr = new byte[((ByteBuffer)alen.getTelephone()).remaining()];
-      ((ByteBuffer)alen.getTelephone()).get(bytearr);
-      System.out.println(new String(bytearr));
-    }
-    if (alen != null)
+    if (alen != null){
       System.out.println(alen.getFirstname());
+      if (alen.getTelephone() instanceof Utf8)
+        System.out.println(alen.getTelephone());
+      if (alen.getTelephone() instanceof ByteBuffer){
+        byte[] bytearr = new byte[((ByteBuffer)alen.getTelephone()).remaining()];
+        ((ByteBuffer)alen.getTelephone()).get(bytearr);
+        System.out.println(new String(bytearr));
+      }
+    }
     else
       System.out.println("Alien hasn't been found.");
   }
   
-  private static void userGetOperations(){
+  private static void verifyUser(User pUsr){
     // Retrieving first user
-    User usr = userStore.get("pmcfadin");
-    if(usr != null)
-      System.out.println(usr.getFirstname());
+    if(pUsr != null)
+      System.out.println(pUsr.getFirstname());
     else
       System.out.println("User hasn't been object.");
-    
-    // Retrieving second user
-    usr = userStore.get("renatoj.marroquin");
-    System.out.println(usr.getFirstname());
   }
 
   /**
@@ -197,8 +203,6 @@ public class GoraRunner {
         DataStoreFactory.createDataStore((Class<? extends DataStore<K,T>>)dataStoreClass, 
                                           keyClass, persistentClass,
                                           conf);
-    if (dataStore != null)
-      dataStores.add(dataStore);
 
     return dataStore;
   }
