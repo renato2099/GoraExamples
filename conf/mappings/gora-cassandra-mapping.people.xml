@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<gora-orm>
+
+  <keyspace name="WebPage" host="localhost" cluster="Test Cluster">
+    <family name="p"/>
+    <family name="f"/>
+    <family name="sc" type="super"/>
+  </keyspace>
+
+  <class name="org.apache.gora.examples.generated.WebPage" keyClass="java.lang.String" keyspace="WebPage">
+    <field name="url" family="p" qualifier="c:u"/>
+    <field name="content" family="p" qualifier="p:cnt:c"/>
+    <field name="parsedContent" family="sc" qualifier="p:parsedContent"/>
+    <field name="outlinks" family="sc" qualifier="p:outlinks"/>
+    <field name="metadata" family="sc" qualifier="c:mt"/>
+  </class>
+  
+  <keyspace name="Killrvideo" host="localhost" cluster="Test Cluster">
+    <family name="users"/>
+    <family name="aliens"/>
+    <family name="p"/>
+    <family name="simpsons" gc_grace_seconds="5"/>
+  </keyspace>
+  
+  <class name="org.apache.gora.examples.generated.User" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="firstname" family="users" qualifier="firstname"/>
+    <field name="lastname" family="users" qualifier="lastname"/>
+    <field name="password" family="users" qualifier="password"/>
+  </class>
+
+  <class name="org.apache.gora.examples.generated.Alien" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="firstname" family="aliens" qualifier="firstname"/>
+    <field name="lastname" family="aliens" qualifier="lastname"/>
+    <field name="password" family="aliens" qualifier="password"/>
+    <field name="telephone" family="aliens" qualifier="telephone"/>
+  </class>
+
+  <class name="org.apache.gora.examples.generated.Simpson" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="firstname" family="simpsons" qualifier="firstname" ttl="10"/>
+    <field name="lastname" family="simpsons" qualifier="lastname" ttl="10"/>
+    <field name="password" family="simpsons" qualifier="password" ttl="10"/>
+    <field name="telephone" family="simpsons" qualifier="telephone" ttl="10"/>
+  </class>
+
+  <class name="org.apache.gora.examples.generated.Employee" keyClass="java.lang.String" keyspace="Killrvideo">
+    <field name="name"  family="p" qualifier="info:nm" ttl="11"/>
+    <field name="dateOfBirth"  family="p" qualifier="info:db" ttl="12"/>
+    <field name="ssn"  family="p" qualifier="info:sn" ttl="13"/>
+    <field name="salary"  family="p" qualifier="info:sl" ttl="14"/>
+    <field name="boss" family="p" qualifier="info:bs" ttl="15"/>
+    <field name="webpage" family="p" qualifier="info:wp" ttl="16"/>
+  </class>
+</gora-orm>

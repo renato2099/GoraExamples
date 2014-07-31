@@ -1,0 +1,18 @@
+{
+  "type": "record",
+  "name": "Vertex",
+  "namespace": "org.apache.gora.examples.generated",
+  "fields" : [
+    {"name": "vertexId", "type": "string"},
+    {"name": "value", "type": "float"},
+    {"name": "edges", "type": {"type":"array", "items": {
+      "name": "Edge",
+      "type": "record",
+      "namespace": "org.apache.gora.examples.generated",
+      "fields": [
+        {"name": "vertexId", "type": "string"},
+        {"name": "edgeValue", "type": "float"}
+      ]
+    }}}
+  ]
+}
