@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>GoraExamples</groupId>
     <artifactId>GoraExamples</artifactId>
@@ -21,12 +22,6 @@
     </build>
     <properties>
         <amazon.version>1.8.6</amazon.version>
-        <!--
-        mvn install:install-file -Dfile=/Users/renatomarroquin/Documents/workspace/workspaceGoraBranches/gora-rmm/gora-core/target/gora-core-0.5-SNAPSHOT.jar -DgroupId=org.apache.gora -DartifactId=gora-core -Dversion=0.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true 
-        mvn install:install-file -Dfile=/Users/renatomarroquin/Documents/workspace/workspaceGoraBranches/gora-rmm/gora-cassandra/target/gora-cassandra-0.5-SNAPSHOT.jar -DgroupId=org.apache.gora -DartifactId=gora-cassandra -Dversion=0.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
-        mvn install:install-file -Dfile=/Users/renatomarroquin/Documents/workspace/workspaceGoraBranches/gora-rmm/gora-dynamodb/target/gora-dynamodb-0.5-SNAPSHOT.jar -DgroupId=org.apache.gora -DartifactId=gora-dynamodb -Dversion=0.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
-        mvn install:install-file -Dfile=/Users/renatomarroquin/Documents/workspace/workspaceGoraBranches/gora-rmm/gora-hbase/target/gora-hbase-0.5-SNAPSHOT.jar -DgroupId=org.apache.gora -DartifactId=gora-hbase -Dversion=0.5-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
-        -->
     </properties>
     <dependencies>
         <!-- Amazon Dependencies -->

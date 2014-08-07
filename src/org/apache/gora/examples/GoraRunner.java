@@ -19,11 +19,8 @@ package org.apache.gora.examples;
 
 import java.util.HashMap;
 
-//import org.apache.gora.examples.generated.old.Simpson;
-//import org.apache.gora.examples.generated.old.Vertex;
-//import org.apache.gora.dynamodb.query.DynamoDBKey;
-//import org.apache.gora.dynamodb.store.DynamoDBStore;
-import org.apache.gora.persistency.impl.PersistentBase;
+import org.apache.gora.examples.generated.Employee;
+import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
 import org.apache.gora.store.DataStore;
 import org.apache.gora.store.DataStoreFactory;
@@ -31,6 +28,10 @@ import org.apache.gora.util.GoraException;
 import org.apache.gora.utils.GoraUtils;
 import org.apache.gora.utils.GoraUtils.Type;
 import org.apache.hadoop.conf.Configuration;
+//import org.apache.gora.examples.generated.old.Simpson;
+//import org.apache.gora.examples.generated.old.Vertex;
+//import org.apache.gora.dynamodb.query.DynamoDBKey;
+//import org.apache.gora.dynamodb.store.DynamoDBStore;
 
 /**
  * GoraRunner enables us to create a {@link DataStore} via
@@ -42,29 +43,21 @@ import org.apache.hadoop.conf.Configuration;
  * @author renatomarroquin
  * 
  */
-public class GoraRunner<K, T extends PersistentBase> {
+public class GoraRunner<K, T extends Persistent> {
 
   /** Data store to handle user storage */
   protected HashMap<String, DataStore<K, T>> dataStores;
-
-  /** Class of the key. */
-  protected Class<K> keyClass;
-
-  /** Class of the object to be persisted. */
-  protected Class<T> persistentClass;
 
   /**
    * @param args
    */
   public static void main(String[] args) {
 
-    String dsType = "cassandra";
     String dsName = "Killrvideo";
-    // GoraRunner<String, Simpson> gr = new GoraRunner<String, Simpson>();
-    GoraRunner gr;
-
+    GoraRunner<String, Employee> gr = new GoraRunner<String, Employee>();
     // Creating data stores
-    // gr.addDataStore(dsName, dsType, String.class, Simpson.class);
+    gr.addDataStore(dsName, Type.DYNAMODB, String.class, Employee.class);
+
     /**
      * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
      * [3,0,[[0,3],[1,1],[4,4]]] [4,0,[[3,4],[2,4]]]
@@ -75,10 +68,6 @@ public class GoraRunner<K, T extends PersistentBase> {
     // GeneratedUtils.createSimpson("bart.simpsone"));
     // gr.deleteRequests("simpsonStore", gr.createKey("bart.simpsone"));
     // gr.verify(gr.goraRead(dsName, null, null));
-  }
-
-  private K createKey(String pData) {
-    return (K) pData;
   }
 
   /**
