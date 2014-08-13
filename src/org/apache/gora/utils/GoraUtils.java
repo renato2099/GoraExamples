@@ -37,9 +37,9 @@ public class GoraUtils {
    * @throws GoraException
    */
   @SuppressWarnings("unchecked")
-  public static <K, T extends Persistent> DataStore<K, T> createDataStore(
+  public static <D extends DataStore<K, T>, K, T extends Persistent> DataStore<K, T> createDataStore(
       Class<K> keyClass, Class<T> persistentClass,
-      Class<?> dataStoreClass) throws GoraException {
+      Class<D> dataStoreClass) throws GoraException {
     DataStore<K, T> dataStore = DataStoreFactory.createDataStore(
         dataStoreClass, keyClass, persistentClass,
         conf);
@@ -53,7 +53,7 @@ public class GoraUtils {
    * @param pDataStoreName
    * @return
    */
-  private static Class<?> getSpecificDataStore(
+  private static Class<? extends DataStore> getSpecificDataStore(
       Type datastoreType) {
     switch (datastoreType) {
     case CASSANDRA:
@@ -71,7 +71,7 @@ public class GoraUtils {
       String pDataStoreName, Type dsType, Class<K> pKeyClass,
       Class<T> pValueClass) throws GoraException {
     // Getting the specific data store
-    Class<?> dataStoreClass = getSpecificDataStore(dsType);
+    Class<? extends DataStore> dataStoreClass = getSpecificDataStore(dsType);
     return createDataStore(pKeyClass, pValueClass, dataStoreClass);
   }
 

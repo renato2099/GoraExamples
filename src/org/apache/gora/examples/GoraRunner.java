@@ -58,6 +58,8 @@ public class GoraRunner<K, T extends Persistent> {
     GoraRunner<String, person> gr = new GoraRunner<String, person>();
     // Creating data stores
     gr.addDataStore(dsName, Type.DYNAMODB, String.class, person.class);
+    person p = new person();
+    gr.putRequest(dsName, p.getHashKey(), p);
 
     /**
      * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
