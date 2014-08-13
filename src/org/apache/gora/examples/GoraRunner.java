@@ -19,6 +19,7 @@ package org.apache.gora.examples;
 
 import java.util.HashMap;
 
+import org.apache.gora.examples.dynamodb.generated.person;
 import org.apache.gora.examples.generated.Employee;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
@@ -54,9 +55,9 @@ public class GoraRunner<K, T extends Persistent> {
   public static void main(String[] args) {
 
     String dsName = "Killrvideo";
-    GoraRunner<String, Employee> gr = new GoraRunner<String, Employee>();
+    GoraRunner<String, person> gr = new GoraRunner<String, person>();
     // Creating data stores
-    gr.addDataStore(dsName, Type.DYNAMODB, String.class, Employee.class);
+    gr.addDataStore(dsName, Type.DYNAMODB, String.class, person.class);
 
     /**
      * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
@@ -71,7 +72,7 @@ public class GoraRunner<K, T extends Persistent> {
   }
 
   /**
-   * Read elements from a Gorian data store using a range query.
+   * Read elements from a Gora data store using a range query.
    * 
    * @param pDataStoreName
    * @param pStartKey

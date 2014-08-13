@@ -3,8 +3,7 @@
  */
 package org.apache.gora.examples;
 
-import org.apache.avro.util.Utf8;
-import org.apache.gora.cassandra.store.CassandraStore;
+import org.apache.gora.dynamodb.store.DynamoDBStore;
 import org.apache.gora.examples.generated.Employee;
 import org.apache.gora.persistency.impl.PersistentBase;
 import org.apache.gora.store.DataStore;
@@ -24,7 +23,7 @@ public class SimpleGora<K, T extends PersistentBase> {
   @SuppressWarnings("unchecked")
   public static void main(String[] args) throws GoraException {
     DataStore<CharSequence, Employee> dataStore = 
-        DataStoreFactory.createDataStore(CassandraStore.class, 
+        DataStoreFactory.createDataStore(DynamoDBStore.class, 
                                           String.class, Employee.class,
                                           new Configuration());
     Employee emp1 = new Employee();

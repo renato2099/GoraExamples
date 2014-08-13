@@ -22,6 +22,7 @@
     </build>
     <properties>
         <amazon.version>1.8.6</amazon.version>
+        <hadoop.version>1.0.1</hadoop.version>
     </properties>
     <dependencies>
         <!-- Amazon Dependencies -->
@@ -29,6 +30,12 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
             <version>${amazon.version}</version>
+        </dependency>
+        <!-- Hadoop Dependencies -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>${hadoop.version}</version>
         </dependency>
         <!-- Gora Dependencies -->
             <dependency>
@@ -38,18 +45,19 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.gora</groupId>
-                <artifactId>gora-cassandra</artifactId>
+                <artifactId>gora-dynamodb</artifactId>
                 <version>0.5-SNAPSHOT</version>
             </dependency>
+            <!-- 
             <dependency>
                 <groupId>org.apache.gora</groupId>
-                <artifactId>gora-dynamodb</artifactId>
+                <artifactId>gora-cassandra</artifactId>
                 <version>0.5-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.gora</groupId>
                 <artifactId>gora-hbase</artifactId>
                 <version>0.5-SNAPSHOT</version>
-            </dependency>
+            </dependency> -->
         </dependencies>
 </project>

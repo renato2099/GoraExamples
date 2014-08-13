@@ -3,9 +3,9 @@
  */
 package org.apache.gora.utils;
 
-import org.apache.gora.cassandra.store.CassandraStore;
+//import org.apache.gora.cassandra.store.CassandraStore;
 import org.apache.gora.dynamodb.store.DynamoDBStore;
-import org.apache.gora.hbase.store.HBaseStore;
+//import org.apache.gora.hbase.store.HBaseStore;
 //import org.apache.gora.hbase.store.HBaseStore;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Query;
@@ -25,7 +25,6 @@ public class GoraUtils {
     CASSANDRA, HBASE, DYNAMODB
   }
 
-  protected static Class<? extends DataStore> dataStoreClass;
   private static Configuration conf;
 
   /**
@@ -39,11 +38,11 @@ public class GoraUtils {
    */
   @SuppressWarnings("unchecked")
   public static <K, T extends Persistent> DataStore<K, T> createDataStore(
-      Class<K> keyClass, Class<T> persistentClass) throws GoraException {
-    // DataStoreFactory.createProps();
+      Class<K> keyClass, Class<T> persistentClass,
+      Class<?> dataStoreClass) throws GoraException {
     DataStore<K, T> dataStore = DataStoreFactory.createDataStore(
-        (Class<? extends DataStore<K, T>>) dataStoreClass, keyClass,
-        persistentClass, conf);
+        dataStoreClass, keyClass, persistentClass,
+        conf);
 
     return dataStore;
   }
@@ -54,15 +53,15 @@ public class GoraUtils {
    * @param pDataStoreName
    * @return
    */
-  private static Class<? extends DataStore> getSpecificDataStore(
+  private static Class<?> getSpecificDataStore(
       Type datastoreType) {
     switch (datastoreType) {
     case CASSANDRA:
-      return CassandraStore.class;
+      // return CassandraStore.class;
     case DYNAMODB:
       return DynamoDBStore.class;
     case HBASE:
-      return HBaseStore.class;
+      // return HBaseStore.class;
     default:
       throw new IllegalStateException("DataStore not supported yet.");
     }
@@ -72,8 +71,8 @@ public class GoraUtils {
       String pDataStoreName, Type dsType, Class<K> pKeyClass,
       Class<T> pValueClass) throws GoraException {
     // Getting the specific data store
-    dataStoreClass = getSpecificDataStore(dsType);
-    return createDataStore(pKeyClass, pValueClass);
+    Class<?> dataStoreClass = getSpecificDataStore(dsType);
+    return createDataStore(pKeyClass, pValueClass, dataStoreClass);
   }
 
   public static <K, T extends Persistent> Result<K, T> getRequests(
