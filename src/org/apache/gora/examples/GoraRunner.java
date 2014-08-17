@@ -59,6 +59,8 @@ public class GoraRunner<K, T extends Persistent> {
     // Creating data stores
     gr.addDataStore(dsName, Type.DYNAMODB, String.class, person.class);
     person p = new person();
+    p.setHashKey("43024255");
+    p.setFirstName("qwerty");
     gr.putRequest(dsName, p.getHashKey(), p);
 
     /**
