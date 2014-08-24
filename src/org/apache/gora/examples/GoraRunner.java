@@ -19,8 +19,8 @@ package org.apache.gora.examples;
 
 import java.util.HashMap;
 
+import org.apache.gora.dynamodb.query.DynamoDBKey;
 import org.apache.gora.examples.dynamodb.generated.person;
-import org.apache.gora.examples.generated.Employee;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
 import org.apache.gora.store.DataStore;
@@ -52,16 +52,25 @@ public class GoraRunner<K, T extends Persistent> {
   /**
    * @param args
    */
+  @SuppressWarnings("rawtypes")
   public static void main(String[] args) {
 
-    String dsName = "Killrvideo";
-    GoraRunner<String, person> gr = new GoraRunner<String, person>();
-    // Creating data stores
-    gr.addDataStore(dsName, Type.DYNAMODB, String.class, person.class);
-    person p = new person();
-    p.setHashKey("43024255");
-    p.setFirstName("qwerty");
-    gr.putRequest(dsName, p.getHashKey(), p);
+    String dsName = "dynamoDBpeople";
+    Type dsType = Type.DYNAMODB;
+    
+    switch(dsType) {
+      case DYNAMODB:
+        GoraRunner<DynamoDBKey, person> gr = new GoraRunner<DynamoDBKey, person>();
+        // Creating data stores
+        gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
+        gr.putRequest(dsName, DynamoDBRunner.getNativeKey(), DynamoDBRunner.getNativeObject());
+        break;
+      case ACCUMULO:
+      case CASSANDRA: 
+      case HBASE:
+        default: System.out.println("Data stores not supported yet.");
+    }
+    
 
     /**
      * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
@@ -90,7 +99,7 @@ public class GoraRunner<K, T extends Persistent> {
   }
 
   /**
-   * Put elements into a Gorian data store.
+   * Put elements into a Gora data store.
    * 
    * @param pDataStoreName
    * @param pGraph

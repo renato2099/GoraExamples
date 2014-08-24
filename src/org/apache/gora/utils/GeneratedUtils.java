@@ -1,9 +1,5 @@
 package org.apache.gora.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.avro.util.Utf8;
 //import org.apache.gora.examples.generated.old.Edge;
 //import org.apache.gora.examples.generated.old.Simpson;
 //import org.apache.gora.examples.generated.old.Vertex;

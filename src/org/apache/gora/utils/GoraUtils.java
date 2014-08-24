@@ -3,10 +3,7 @@
  */
 package org.apache.gora.utils;
 
-//import org.apache.gora.cassandra.store.CassandraStore;
 import org.apache.gora.dynamodb.store.DynamoDBStore;
-//import org.apache.gora.hbase.store.HBaseStore;
-//import org.apache.gora.hbase.store.HBaseStore;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Query;
 import org.apache.gora.query.Result;
@@ -22,7 +19,18 @@ import org.apache.hadoop.conf.Configuration;
 public class GoraUtils {
 
   public static enum Type {
-    CASSANDRA, HBASE, DYNAMODB
+    CASSANDRA("cassandra"), HBASE("hbase"), DYNAMODB("dynamodb"), ACCUMULO(
+        "accumulo");
+    private String value;
+
+    Type(String val) {
+      this.value = val;
+    }
+
+    @Override
+    public String toString() {
+      return this.value;
+    }
   }
 
   private static Configuration conf;
@@ -36,13 +44,11 @@ public class GoraUtils {
    * @return
    * @throws GoraException
    */
-  @SuppressWarnings("unchecked")
   public static <D extends DataStore<K, T>, K, T extends Persistent> DataStore<K, T> createDataStore(
-      Class<K> keyClass, Class<T> persistentClass,
-      Class<D> dataStoreClass) throws GoraException {
+      Class<K> keyClass, Class<T> persistentClass, Class<D> dataStoreClass)
+      throws GoraException {
     DataStore<K, T> dataStore = DataStoreFactory.createDataStore(
-        dataStoreClass, keyClass, persistentClass,
-        conf);
+        dataStoreClass, keyClass, persistentClass, conf);
 
     return dataStore;
   }
@@ -56,12 +62,11 @@ public class GoraUtils {
   private static Class<? extends DataStore> getSpecificDataStore(
       Type datastoreType) {
     switch (datastoreType) {
-    case CASSANDRA:
-      // return CassandraStore.class;
     case DYNAMODB:
       return DynamoDBStore.class;
+    case CASSANDRA:
     case HBASE:
-      // return HBaseStore.class;
+    case ACCUMULO:
     default:
       throw new IllegalStateException("DataStore not supported yet.");
     }
