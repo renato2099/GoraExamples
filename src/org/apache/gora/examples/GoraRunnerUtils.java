@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import org.apache.gora.dynamodb.query.DynamoDBKey;
 import org.apache.gora.examples.dynamodb.generated.person;
+import org.apache.gora.examples.runners.DynamoDBNativeRunner;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
 import org.apache.gora.store.DataStore;
@@ -44,7 +45,7 @@ import org.apache.hadoop.conf.Configuration;
  * @author renatomarroquin
  * 
  */
-public class GoraRunner<K, T extends Persistent> {
+public class GoraRunnerUtils<K, T extends Persistent> {
 
   /** Data store to handle user storage */
   protected HashMap<String, DataStore<K, T>> dataStores;
@@ -52,18 +53,18 @@ public class GoraRunner<K, T extends Persistent> {
   /**
    * @param args
    */
-  @SuppressWarnings("rawtypes")
   public static void main(String[] args) {
 
     String dsName = "dynamoDBpeople";
     Type dsType = Type.DYNAMODB;
-    
+
     switch(dsType) {
       case DYNAMODB:
-        GoraRunner<DynamoDBKey, person> gr = new GoraRunner<DynamoDBKey, person>();
+        GoraRunnerUtils<DynamoDBKey, person> gr = new GoraRunnerUtils<DynamoDBKey, person>();
         // Creating data stores
         gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
-        gr.putRequest(dsName, DynamoDBRunner.getNativeKey(), DynamoDBRunner.getNativeObject());
+        DynamoDBNativeRunner runnerUtils = new DynamoDBNativeRunner();
+        gr.putRequest(dsName, runnerUtils.getKey(), runnerUtils.getObject());
         break;
       case ACCUMULO:
       case CASSANDRA: 

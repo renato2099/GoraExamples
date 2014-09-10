@@ -1,21 +1,24 @@
-package org.apache.gora.examples;
+package org.apache.gora.examples.runners;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
 import org.apache.gora.dynamodb.query.DynamoDBKey;
+import org.apache.gora.examples.GoraDataStoreRunnerI;
 import org.apache.gora.examples.dynamodb.generated.person;
 
-public class DynamoDBRunner {
+public class DynamoDBNativeRunner implements GoraDataStoreRunnerI<DynamoDBKey<String, String>, person> {
 
-  public static DynamoDBKey<String, String> getNativeKey() {
+  @Override
+  public DynamoDBKey<String, String> getKey() {
     DynamoDBKey<String, String> dKey = new DynamoDBKey<String, String>();
     dKey.setHashKey("Brazil");
     dKey.setRangeKey("10/10/1985");
     return dKey;
   }
 
-  public static person getNativeObject() {
+  @Override
+  public person getObject() {
     person p = new person();
     p.setHashKey("43024255");
     p.setRangeKey("11/06/85");

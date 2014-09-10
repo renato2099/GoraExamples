@@ -24,7 +24,7 @@ public class SimpleGora<K, T extends PersistentBase> {
   public static void main(String[] args) throws GoraException {
     DataStore<CharSequence, Employee> dataStore = 
         DataStoreFactory.createDataStore(DynamoDBStore.class, 
-                                          String.class, Employee.class,
+            CharSequence.class, Employee.class,
                                           new Configuration());
     Employee emp1 = new Employee();
     emp1.setSsn("43024255");
