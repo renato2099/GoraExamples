@@ -53,25 +53,31 @@ public class GoraRunnerUtils<K, T extends Persistent> {
   /**
    * @param args
    */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   public static void main(String[] args) {
 
     String dsName = "dynamoDBpeople";
     Type dsType = Type.DYNAMODB;
+    GoraRunnerUtils gr;
+    GoraDataStoreRunnerI runnerUtils;
 
     switch(dsType) {
       case DYNAMODB:
-        GoraRunnerUtils<DynamoDBKey, person> gr = new GoraRunnerUtils<DynamoDBKey, person>();
+        gr = new GoraRunnerUtils<DynamoDBKey, person>();
         // Creating data stores
         gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
-        DynamoDBNativeRunner runnerUtils = new DynamoDBNativeRunner();
-        gr.putRequest(dsName, runnerUtils.getKey(), runnerUtils.getObject());
+        runnerUtils = new DynamoDBNativeRunner();
         break;
       case ACCUMULO:
       case CASSANDRA: 
       case HBASE:
-        default: System.out.println("Data stores not supported yet.");
+      default: System.out.println("Data stores not supported yet."); 
+        return;
+      
     }
-    
+    //gr.putRequest(dsName, runnerUtils.getKey(), runnerUtils.getObject());
+    Persistent obj = gr.getRequest(dsName, runnerUtils.getKey());
+    System.out.println(obj.toString());
 
     /**
      * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
@@ -93,9 +99,9 @@ public class GoraRunnerUtils<K, T extends Persistent> {
    * @param pEndKey
    * @return
    */
-  public Result<K, T> goraRead(String pDataStoreName, K pStartKey, K pEndKey) {
-    System.out.println("Performing get requests for <" + pDataStoreName + ">");
-    return GoraUtils.getRequests(dataStores.get(pDataStoreName), pStartKey,
+  public Result<K, T> queryRequest(String pDataStoreName, K pStartKey, K pEndKey) {
+    System.out.println("Performing get requests for <" + pDataStoreName + "> using key <" + pStartKey.toString() + ">");
+    return GoraUtils.queryRequests(dataStores.get(pDataStoreName), pStartKey,
         pEndKey);
   }
 
@@ -112,7 +118,14 @@ public class GoraRunnerUtils<K, T extends Persistent> {
    *          dataStore.put(vrtxId, pGraph.get(vrtxId)); dataStore.flush(); }
    */
 
+  public T getRequest(String pDataStoreName, K pKey) {
+    System.out.println("Performing get requests for <" + pDataStoreName + "> using key <" + pKey + ">");
+    DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
+    return dataStore.get(pKey);
+  }
+
   public void putRequest(String pDataStoreName, K pKey, T pValue) {
+    System.out.println("Performing put requests for <" + pDataStoreName + ">");
     DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
     dataStore.put(pKey, pValue);
     dataStore.flush();

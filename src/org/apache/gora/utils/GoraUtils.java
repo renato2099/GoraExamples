@@ -80,7 +80,7 @@ public class GoraUtils {
     return createDataStore(pKeyClass, pValueClass, dataStoreClass);
   }
 
-  public static <K, T extends Persistent> Result<K, T> getRequests(
+  public static <K, T extends Persistent> Result<K, T> queryRequests(
       DataStore<K, T> pDataStore, K pStartKey, K pEndKey) {
     Query<K, T> query = pDataStore.newQuery();
     query.setStartKey(pStartKey);

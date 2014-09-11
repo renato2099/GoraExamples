@@ -12,8 +12,8 @@ public class DynamoDBNativeRunner implements GoraDataStoreRunnerI<DynamoDBKey<St
   @Override
   public DynamoDBKey<String, String> getKey() {
     DynamoDBKey<String, String> dKey = new DynamoDBKey<String, String>();
-    dKey.setHashKey("Brazil");
-    dKey.setRangeKey("10/10/1985");
+    dKey.setHashKey("43024255");
+    dKey.setRangeKey("11/06/85");
     return dKey;
   }
 
