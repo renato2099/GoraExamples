@@ -2,7 +2,6 @@ package org.apache.gora.examples.dynamodb.generated;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.avro.Schema;
 import org.apache.avro.Schema.Field;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.persistency.Tombstone;
@@ -14,12 +13,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "person")
 public class person implements Persistent {
-    private String ssn;
+    private Long ssn;
     private String date;
 
     @DynamoDBHashKey(attributeName="ssn") 
-    public String getHashKey() {  return ssn; } 
-    public void setHashKey(String pSsn){  this.ssn = pSsn; }
+    public Long getHashKey() {  return ssn; } 
+    public void setHashKey(Long pSsn){  this.ssn = pSsn; }
     @DynamoDBRangeKey(attributeName="date") 
     public String getRangeKey() {  return date; } 
     public void setRangeKey(String pDate){  this.date = pDate; }

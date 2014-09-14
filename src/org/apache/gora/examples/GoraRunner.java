@@ -18,6 +18,8 @@
 package org.apache.gora.examples;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.gora.dynamodb.query.DynamoDBKey;
 import org.apache.gora.examples.dynamodb.generated.person;
@@ -25,15 +27,9 @@ import org.apache.gora.examples.runners.DynamoDBNativeRunner;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
 import org.apache.gora.store.DataStore;
-import org.apache.gora.store.DataStoreFactory;
 import org.apache.gora.util.GoraException;
 import org.apache.gora.utils.GoraUtils;
 import org.apache.gora.utils.GoraUtils.Type;
-import org.apache.hadoop.conf.Configuration;
-//import org.apache.gora.examples.generated.old.Simpson;
-//import org.apache.gora.examples.generated.old.Vertex;
-//import org.apache.gora.dynamodb.query.DynamoDBKey;
-//import org.apache.gora.dynamodb.store.DynamoDBStore;
 
 /**
  * GoraRunner enables us to create a {@link DataStore} via
@@ -45,7 +41,7 @@ import org.apache.hadoop.conf.Configuration;
  * @author renatomarroquin
  * 
  */
-public class GoraRunnerUtils<K, T extends Persistent> {
+public class GoraRunner<K, T extends Persistent> {
 
   /** Data store to handle user storage */
   protected HashMap<String, DataStore<K, T>> dataStores;
@@ -58,37 +54,36 @@ public class GoraRunnerUtils<K, T extends Persistent> {
 
     String dsName = "dynamoDBpeople";
     Type dsType = Type.DYNAMODB;
-    GoraRunnerUtils gr;
+    GoraRunner gr;
     GoraDataStoreRunnerI runnerUtils;
 
-    switch(dsType) {
-      case DYNAMODB:
-        gr = new GoraRunnerUtils<DynamoDBKey, person>();
-        // Creating data stores
-        gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
-        runnerUtils = new DynamoDBNativeRunner();
-        break;
-      case ACCUMULO:
-      case CASSANDRA: 
-      case HBASE:
-      default: System.out.println("Data stores not supported yet."); 
-        return;
-      
-    }
-    //gr.putRequest(dsName, runnerUtils.getKey(), runnerUtils.getObject());
-    Persistent obj = gr.getRequest(dsName, runnerUtils.getKey());
-    System.out.println(obj.toString());
+    switch (dsType) {
+    case DYNAMODB:
+      gr = new GoraRunner<DynamoDBKey, person>();
+      // Creating data stores
+      gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
+      runnerUtils = new DynamoDBNativeRunner();
+      break;
+    case ACCUMULO:
+    case CASSANDRA:
+    case HBASE:
+    default:
+      System.out.println("Data stores not supported yet.");
+      return;
 
-    /**
-     * [0,0,[[1,1],[3,3]]] [1,0,[[0,1],[2,2],[3,1]]] [2,0,[[1,2],[4,4]]]
-     * [3,0,[[0,3],[1,1],[4,4]]] [4,0,[[3,4],[2,4]]]
-     */
-    // Performing requests vertices's requests
-    // gr.putRequests(dsName, GeneratedUtils.getVertices());
-    // gr.putRequest(dsName, gr.createKey("bart.simpsone"),
-    // GeneratedUtils.createSimpson("bart.simpsone"));
-    // gr.deleteRequests("simpsonStore", gr.createKey("bart.simpsone"));
-    // gr.verify(gr.goraRead(dsName, null, null));
+    }
+    gr.putRequest(dsName, runnerUtils.getElements());
+    //Persistent obj = gr.getRequest(dsName, runnerUtils.getKey());
+    //System.out.println(((obj.getClass().cast(obj))).toString());
+    Result res = gr.queryRequest(dsName, runnerUtils.getMinKey(), runnerUtils.getMaxKey());
+    runnerUtils.handleResult(res);
+    
+    //DynamoDBKey dKey = new DynamoDBKey();
+    //dKey.setHashKey(1L);
+    //dKey.setRangeKey("03/03/86");
+    //res = gr.queryRequest(dsName, dKey, null);
+    //runnerUtils.handleResult(res);
+
   }
 
   /**
@@ -100,52 +95,51 @@ public class GoraRunnerUtils<K, T extends Persistent> {
    * @return
    */
   public Result<K, T> queryRequest(String pDataStoreName, K pStartKey, K pEndKey) {
-    System.out.println("Performing get requests for <" + pDataStoreName + "> using key <" + pStartKey.toString() + ">");
+    System.out.println("Performing get requests for <" + pDataStoreName
+        + "> using key <" + pStartKey + ", "+ pEndKey + ">");
     return GoraUtils.queryRequests(dataStores.get(pDataStoreName), pStartKey,
         pEndKey);
   }
 
   /**
-   * Put elements into a Gora data store.
+   * Gets a specific element from a data store.
    * 
    * @param pDataStoreName
-   * @param pGraph
-   * 
-   *          public void putRequests(String pDataStoreName, Map<K, T> pGraph){
-   *          System.out.println("Performing put requests for " +
-   *          pDataStoreName); DataStore<K, T> dataStore =
-   *          dataStores.get(pDataStoreName); for(K vrtxId : pGraph.keySet())
-   *          dataStore.put(vrtxId, pGraph.get(vrtxId)); dataStore.flush(); }
+   * @param pKey
+   * @return
    */
-
   public T getRequest(String pDataStoreName, K pKey) {
-    System.out.println("Performing get requests for <" + pDataStoreName + "> using key <" + pKey + ">");
+    System.out.println("Performing get requests for <" + pDataStoreName
+        + "> using key <" + pKey + ">");
     DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
     return dataStore.get(pKey);
   }
 
+  /**
+   * Puts more than one element into a specific data store.
+   * 
+   * @param pDataStoreName
+   * @param values
+   */
+  public void putRequest(String pDataStoreName, Map<K, T> values) {
+    for (Entry<K, T> en : values.entrySet()) {
+      putRequest(pDataStoreName, en.getKey(), en.getValue());
+    }
+  }
+
+  /**
+   * Puts a single element into a specific data store.
+   * 
+   * @param pDataStoreName
+   * @param pKey
+   * @param pValue
+   */
   public void putRequest(String pDataStoreName, K pKey, T pValue) {
     System.out.println("Performing put requests for <" + pDataStoreName + ">");
     DataStore<K, T> dataStore = dataStores.get(pDataStoreName);
     dataStore.put(pKey, pValue);
     dataStore.flush();
   }
-
-  /**
-   * Verifies if a result obtained has our vertices.
-   * 
-   * @param pResults
-   * 
-   *          public void verify(Result<K, T> pResults){ if (pResults != null){
-   *          try { while (pResults.next()){ Vertex vrtx =
-   *          (Vertex)pResults.get(); System.out.println(vrtx); } } catch
-   *          (IOException e) {
-   *          System.out.println("Error verifying data input.");
-   *          e.printStackTrace(); } catch (Exception e) {
-   *          System.out.println("Error verifying data input.");
-   *          e.printStackTrace(); } } else
-   *          System.out.println("Objetos hasn't been found."); }
-   */
 
   /**
    * Adds a data store to the ones being used.
