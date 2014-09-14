@@ -72,18 +72,13 @@ public class GoraRunner<K, T extends Persistent> {
       return;
 
     }
+    // Put requests
     gr.putRequest(dsName, runnerUtils.getElements());
-    //Persistent obj = gr.getRequest(dsName, runnerUtils.getKey());
-    //System.out.println(((obj.getClass().cast(obj))).toString());
+    // Get request
+    runnerUtils.handleResult(gr.getRequest(dsName, runnerUtils.getKey()));
+    // Query request
     Result res = gr.queryRequest(dsName, runnerUtils.getMinKey(), runnerUtils.getMaxKey());
     runnerUtils.handleResult(res);
-    
-    //DynamoDBKey dKey = new DynamoDBKey();
-    //dKey.setHashKey(1L);
-    //dKey.setRangeKey("03/03/86");
-    //res = gr.queryRequest(dsName, dKey, null);
-    //runnerUtils.handleResult(res);
-
   }
 
   /**
