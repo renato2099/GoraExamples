@@ -73,7 +73,7 @@ public class WebPageSupplier implements GoraDataStoreRunnerI<String, WebPage> {
   private static final int ROOT_ELEM = 0;
 
   /** Last URL */
-  private static final int BOT_ELEM = URLS.length;
+  private static final int BOT_ELEM = URLS.length - 1;
 
   @Override
   public WebPage getObject() {
@@ -89,7 +89,7 @@ public class WebPageSupplier implements GoraDataStoreRunnerI<String, WebPage> {
   public Map<String, WebPage> getElements() {
     Map<String, WebPage> webs = new HashMap<String, WebPage>();
     WebPage page;
-    for(int i = 0; i < URLS.length; i++) {
+    for (int i = 0; i < URLS.length; i++) {
       page = buildWebPage(i);
       webs.put(URLS[i], page);
     }
@@ -98,21 +98,24 @@ public class WebPageSupplier implements GoraDataStoreRunnerI<String, WebPage> {
 
   /**
    * Builds a webPage from data arrays.
-   * @param pos from where data will be taken.
+   * 
+   * @param pos
+   *          from where data will be taken.
    * @return WebPage constructe.
    */
   private WebPage buildWebPage(int pos) {
     WebPage page = WebPage.newBuilder().build();
     page.setUrl(new Utf8(URLS[pos]));
     page.setParsedContent(new ArrayList<CharSequence>());
-    if (CONTENTS[pos]!=null){
+    if (CONTENTS[pos] != null) {
       page.setContent(ByteBuffer.wrap(CONTENTS[pos].getBytes()));
-      for(String token : CONTENTS[pos].split(" ")) {
-        page.getParsedContent().add(new Utf8(token));  
+      for (String token : CONTENTS[pos].split(" ")) {
+        page.getParsedContent().add(new Utf8(token));
       }
     }
-    for(int j=0; j<LINKS[pos].length; j++) {
-      page.getOutlinks().put(new Utf8(URLS[LINKS[pos][j]]), new Utf8(ANCHORS[pos][j]));
+    for (int j = 0; j < LINKS[pos].length; j++) {
+      page.getOutlinks().put(new Utf8(URLS[LINKS[pos][j]]),
+          new Utf8(ANCHORS[pos][j]));
     }
     Metadata metadata = Metadata.newBuilder().build();
     metadata.setVersion(1);
@@ -120,6 +123,7 @@ public class WebPageSupplier implements GoraDataStoreRunnerI<String, WebPage> {
     page.setMetadata(metadata);
     return page;
   }
+
   @Override
   public String getMaxKey() {
     return URLS[BOT_ELEM];
@@ -132,14 +136,25 @@ public class WebPageSupplier implements GoraDataStoreRunnerI<String, WebPage> {
 
   @Override
   public void handleResult(Result<String, WebPage> res) {
-    // TODO Auto-generated method stub
-
+    boolean any = false;
+    try {
+      while (res.next()) {
+        System.out.println("Key: " + res.getKey() + " * Value:" + res);
+        any = true;
+      }
+      if (!any)
+        System.out.println("There were no elements fetched.");
+    } catch (Exception e) {
+      System.out.println("Error while handling result from DynamoDB.");
+      e.printStackTrace();
+    }
   }
 
   @Override
   public void handleResult(WebPage res) {
-    // TODO Auto-generated method stub
-
+    if (res != null) {
+      System.out.println(res.toString());
+    }
   }
 
 }
