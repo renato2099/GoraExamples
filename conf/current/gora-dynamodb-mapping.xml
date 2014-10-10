@@ -20,7 +20,7 @@
 <gora-orm>
 
   <table name="person" readcunit="1" writecunit="1"> <!-- optional descriptors for tables -->
-    <attribute name="ssn" type="S" key="hash"/>
+    <attribute name="ssn" type="N" key="hash"/>
     <attribute name="date" type="S" key="hashrange"/>
     <attribute name="firstName" type="S"/>
     <attribute name="lastName" type="S"/>

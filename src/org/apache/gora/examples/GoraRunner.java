@@ -23,7 +23,9 @@ import java.util.Map.Entry;
 
 import org.apache.gora.dynamodb.query.DynamoDBKey;
 import org.apache.gora.examples.dynamodb.generated.person;
-import org.apache.gora.examples.runners.DynamoDBNativeRunner;
+import org.apache.gora.examples.generated.WebPage;
+import org.apache.gora.examples.suppliers.DynamoDBNativeSupplier;
+import org.apache.gora.examples.suppliers.WebPageSupplier;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Result;
 import org.apache.gora.store.DataStore;
@@ -53,31 +55,37 @@ public class GoraRunner<K, T extends Persistent> {
   public static void main(String[] args) {
 
     String dsName = "dynamoDBpeople";
-    Type dsType = Type.DYNAMODB;
+    String webDs = "webPages";
+    Type dsType = Type.MONGO;
     GoraRunner gr;
     GoraDataStoreRunnerI runnerUtils;
 
     switch (dsType) {
-    case DYNAMODB:
-      gr = new GoraRunner<DynamoDBKey, person>();
-      // Creating data stores
-      gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
-      runnerUtils = new DynamoDBNativeRunner();
-      break;
-    case ACCUMULO:
-    case CASSANDRA:
-    case HBASE:
-    default:
-      System.out.println("Data stores not supported yet.");
-      return;
-
+      // Creating data stores.
+      case DYNAMODB:
+        gr = new GoraRunner<DynamoDBKey, person>();
+        gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
+        runnerUtils = new DynamoDBNativeSupplier();
+        break;
+      // They all support the same type of serialization.
+      case ACCUMULO:
+      case CASSANDRA:
+      case HBASE:
+      case MONGO:
+        gr = new GoraRunner<String, WebPage>();
+        gr.addDataStore(webDs, dsType, String.class, WebPage.class);
+        runnerUtils = new WebPageSupplier();
+      default:
+        System.out.println("Data stores not supported yet.");
+        return;
     }
     // Put requests
     gr.putRequest(dsName, runnerUtils.getElements());
     // Get request
     runnerUtils.handleResult(gr.getRequest(dsName, runnerUtils.getKey()));
     // Query request
-    Result res = gr.queryRequest(dsName, runnerUtils.getMinKey(), runnerUtils.getMaxKey());
+    Result res = gr.queryRequest(dsName, runnerUtils.getMinKey(),
+        runnerUtils.getMaxKey());
     runnerUtils.handleResult(res);
   }
 
@@ -91,7 +99,7 @@ public class GoraRunner<K, T extends Persistent> {
    */
   public Result<K, T> queryRequest(String pDataStoreName, K pStartKey, K pEndKey) {
     System.out.println("Performing get requests for <" + pDataStoreName
-        + "> using key <" + pStartKey + ", "+ pEndKey + ">");
+        + "> using key <" + pStartKey + ", " + pEndKey + ">");
     return GoraUtils.queryRequests(dataStores.get(pDataStoreName), pStartKey,
         pEndKey);
   }

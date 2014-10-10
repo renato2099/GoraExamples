@@ -4,6 +4,7 @@
 package org.apache.gora.utils;
 
 import org.apache.gora.dynamodb.store.DynamoDBStore;
+import org.apache.gora.mongodb.store.MongoStore;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Query;
 import org.apache.gora.query.Result;
@@ -19,8 +20,8 @@ import org.apache.hadoop.conf.Configuration;
 public class GoraUtils {
 
   public static enum Type {
-    CASSANDRA("cassandra"), HBASE("hbase"), DYNAMODB("dynamodb"), ACCUMULO(
-        "accumulo");
+    CASSANDRA("cassandra"), HBASE("hbase"), DYNAMODB("dynamodb"),
+    ACCUMULO("accumulo"), MONGO("mongo");
     private String value;
 
     Type(String val) {
@@ -67,6 +68,8 @@ public class GoraUtils {
     case CASSANDRA:
     case HBASE:
     case ACCUMULO:
+    case MONGO:
+      return MongoStore.class;
     default:
       throw new IllegalStateException("DataStore not supported yet.");
     }
