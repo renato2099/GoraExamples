@@ -3,8 +3,8 @@
  */
 package org.apache.gora.utils;
 
+//import org.apache.gora.dynamodb.store.DynamoDBStore;
 import org.apache.gora.dynamodb.store.DynamoDBStore;
-import org.apache.gora.mongodb.store.MongoStore;
 import org.apache.gora.persistency.Persistent;
 import org.apache.gora.query.Query;
 import org.apache.gora.query.Result;
@@ -34,7 +34,7 @@ public class GoraUtils {
     }
   }
 
-  private static Configuration conf;
+  private static final Configuration conf = new Configuration();
 
   /**
    * Creates a generic data store using the data store class set using the class
@@ -49,7 +49,7 @@ public class GoraUtils {
       Class<K> keyClass, Class<T> persistentClass, Class<D> dataStoreClass)
       throws GoraException {
     DataStore<K, T> dataStore = DataStoreFactory.createDataStore(
-        dataStoreClass, keyClass, persistentClass, conf);
+        dataStoreClass, keyClass, persistentClass, new Configuration());
 
     return dataStore;
   }
@@ -69,7 +69,7 @@ public class GoraUtils {
     case HBASE:
     case ACCUMULO:
     case MONGO:
-      return MongoStore.class;
+      //return MongoStore.class;
     default:
       throw new IllegalStateException("DataStore not supported yet.");
     }

@@ -25,7 +25,7 @@
     <attribute name="firstName" type="S"/>
     <attribute name="lastName" type="S"/>
     <attribute name="salary" type="N"/>
-    <attribute name="visitedplaces" type="S"/>
+    <attribute name="visitedplaces" type="SS"/>
   </table>
 
   <table name="webpage" readcunit="1" writecunit="1">

@@ -32,7 +32,7 @@ import org.apache.gora.query.Result;
  * Class to supply data to be persisted inside DynamoDB using native serialization.
  */
 public class DynamoDBNativeSupplier implements
-    GoraDataStoreRunnerI<DynamoDBKey<Long, String>, person> {
+    GoraDataStoreRunnerI <DynamoDBKey<Long, String>, person> {
 
   private static final String maxRangeKey = "11/06/86";
   private static final String minRangeKey = "03/03/83";

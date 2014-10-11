@@ -21,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.gora.dynamodb.query.DynamoDBKey;
+
+import org.apache.avro.util.Utf8;
+//import org.apache.gora.dynamodb.query.DynamoDBKey;
 import org.apache.gora.examples.dynamodb.generated.person;
 import org.apache.gora.examples.generated.WebPage;
 import org.apache.gora.examples.suppliers.DynamoDBNativeSupplier;
@@ -54,8 +56,7 @@ public class GoraRunner<K, T extends Persistent> {
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public static void main(String[] args) {
 
-    String dsName = "dynamoDBpeople";
-    String webDs = "webPages";
+    String dsName = "webPages";
     Type dsType = Type.MONGO;
     GoraRunner gr;
     GoraDataStoreRunnerI runnerUtils;
@@ -63,24 +64,25 @@ public class GoraRunner<K, T extends Persistent> {
     switch (dsType) {
       // Creating data stores.
       case DYNAMODB:
-        gr = new GoraRunner<DynamoDBKey, person>();
-        gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
-        runnerUtils = new DynamoDBNativeSupplier();
-        break;
+        //gr = new GoraRunner<DynamoDBKey, person>();
+        //gr.addDataStore(dsName, Type.DYNAMODB, DynamoDBKey.class, person.class);
+        //runnerUtils = new DynamoDBNativeSupplier();
+        //break;
       // They all support the same type of serialization.
       case ACCUMULO:
       case CASSANDRA:
       case HBASE:
       case MONGO:
         gr = new GoraRunner<String, WebPage>();
-        gr.addDataStore(webDs, dsType, String.class, WebPage.class);
+        gr.addDataStore(dsName, dsType, String.class, WebPage.class);
         runnerUtils = new WebPageSupplier();
+        break;
       default:
-        System.out.println("Data stores not supported yet.");
+        System.out.println("Data store not supported yet.");
         return;
     }
     // Put requests
-    gr.putRequest(dsName, runnerUtils.getElements());
+    //gr.putRequest(dsName, runnerUtils.getElements());
     // Get request
     runnerUtils.handleResult(gr.getRequest(dsName, runnerUtils.getKey()));
     // Query request

@@ -24,6 +24,9 @@
     <properties>
         <amazon.version>1.9.0</amazon.version>
         <hadoop.version>1.0.1</hadoop.version>
+        <!-- Avro Dependencies -->
+        <avro.version>1.7.6</avro.version>
+        <jackson.version>1.6.9</jackson.version>
     </properties>
     <dependencies>
         <!-- Amazon Dependencies -->
@@ -37,7 +40,57 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-core</artifactId>
             <version>${hadoop.version}</version>
+           <!-- jackson is conflicting with the Avro dep -->
+           <exclusions>
+          <exclusion>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>net.sf.kosmos</groupId>
+            <artifactId>kfs</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>net.java.dev.jets3t</groupId>
+            <artifactId>jets3t</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>core</artifactId>
+          </exclusion>
+        </exclusions>
         </dependency>
+        <!--  Avro dependency -->
+        <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${avro.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    <!-- Avro needs this version of jackson -->
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-core-asl</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
         <!-- Gora Dependencies -->
         <dependency>
             <groupId>org.apache.gora</groupId>
@@ -50,12 +103,12 @@
             <artifactId>gora-dynamodb</artifactId>
             <version>0.6-SNAPSHOT</version>
         </dependency>
-        <!-- GORA - MONGO -->
+        <!-- GORA - MONGO 
         <dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-mongodb</artifactId>
             <version>0.6-SNAPSHOT</version>
-        </dependency>
+        </dependency> -->
         <!-- <dependency> <groupId>org.apache.gora</groupId> <artifactId>gora-cassandra</artifactId> 
             <version>0.5-SNAPSHOT</version> </dependency> <dependency> <groupId>org.apache.gora</groupId> 
             <artifactId>gora-hbase</artifactId> <version>0.5-SNAPSHOT</version> </dependency> -->

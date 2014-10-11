@@ -3,7 +3,7 @@
  */
 package org.apache.gora.examples;
 
-import org.apache.gora.dynamodb.store.DynamoDBStore;
+//import org.apache.gora.dynamodb.store.DynamoDBStore;
 import org.apache.gora.examples.generated.Employee;
 import org.apache.gora.persistency.impl.PersistentBase;
 import org.apache.gora.store.DataStore;
@@ -22,16 +22,16 @@ public class SimpleGora<K, T extends PersistentBase> {
    */
   @SuppressWarnings("unchecked")
   public static void main(String[] args) throws GoraException {
-    DataStore<CharSequence, Employee> dataStore = 
-        DataStoreFactory.createDataStore(DynamoDBStore.class, 
-            CharSequence.class, Employee.class,
-                                          new Configuration());
+    //DataStore<CharSequence, Employee> dataStore = 
+    //    DataStoreFactory.createDataStore(DynamoDBStore.class, 
+    //        CharSequence.class, Employee.class,
+    //                                      new Configuration());
     Employee emp1 = new Employee();
     emp1.setSsn("43024255");
     emp1.setName("Renato");
-    dataStore.put(emp1.getSsn(), emp1);
-    dataStore.flush();
-    Employee sameEmp = dataStore.get(emp1.getSsn());
-    System.out.println(sameEmp.toString());
+    //dataStore.put(emp1.getSsn(), emp1);
+    //dataStore.flush();
+    //Employee sameEmp = dataStore.get(emp1.getSsn());
+    //System.out.println(sameEmp.toString());
   }
 }

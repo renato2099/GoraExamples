@@ -14,11 +14,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "person")
 public class person implements Persistent {
     private Long ssn;
-    private String date;
-
     @DynamoDBHashKey(attributeName="ssn") 
     public Long getHashKey() {  return ssn; } 
     public void setHashKey(Long pSsn){  this.ssn = pSsn; }
+
+    private String date;
     @DynamoDBRangeKey(attributeName="date") 
     public String getRangeKey() {  return date; } 
     public void setRangeKey(String pDate){  this.date = pDate; }
@@ -42,7 +42,6 @@ public class person implements Persistent {
     @DynamoDBAttribute(attributeName = "FirstName")
     public String getFirstName() {  return firstName;  }
     public void setFirstName(String pFirstName) {  this.firstName = pFirstName;  }
-
 
     public void setNew(boolean pNew){}
     public void setDirty(boolean pDirty){}
@@ -69,18 +68,9 @@ public class person implements Persistent {
     @Override
     public void clearDirty() { }
     @Override
-    public Tombstone getTombstone() {
-      // TODO Auto-generated method stub
-      return null;
-    }
+    public Tombstone getTombstone() { return null; }
     @Override
-    public List<Field> getUnmanagedFields() {
-      // TODO Auto-generated method stub
-      return null;
-    }
+    public List<Field> getUnmanagedFields() { return null; }
     @Override
-    public Persistent newInstance() {
-      // TODO Auto-generated method stub
-      return null;
-    }
+    public Persistent newInstance() { return new person(); }
 }
