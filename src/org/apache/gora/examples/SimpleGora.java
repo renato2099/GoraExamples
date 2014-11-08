@@ -23,16 +23,16 @@ public class SimpleGora<K, T extends PersistentBase> {
    */
   @SuppressWarnings("unchecked")
   public static void main(String[] args) throws GoraException {
-    DataStore<CharSequence, Employee> dataStore = 
+    DataStore<String, Employee> dataStore = 
         DataStoreFactory.createDataStore(CassandraStore.class, 
-            CharSequence.class, Employee.class,
+            String.class, Employee.class,
                                           new Configuration());
     Employee emp1 = Employee.newBuilder().build();
     emp1.setSsn("43024255");
     emp1.setName("Renato");
-    dataStore.put(emp1.getSsn(), emp1);
+    dataStore.put(emp1.getSsn().toString(), emp1);
     dataStore.flush();
-    Employee sameEmp = dataStore.get(emp1.getSsn());
+    Employee sameEmp = dataStore.get(emp1.getSsn().toString());
     System.out.println(sameEmp.toString());
   }
 }
