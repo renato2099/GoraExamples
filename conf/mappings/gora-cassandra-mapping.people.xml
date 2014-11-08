@@ -60,7 +60,7 @@
     <field name="telephone" family="simpsons" qualifier="telephone" ttl="10"/>
   </class>
 
-  <class name="org.apache.gora.examples.generated.Employee" keyClass="java.lang.String" keyspace="Killrvideo">
+  <class name="org.apache.gora.examples.generated.Employee" keyClass="java.lang.CharSequence" keyspace="Killrvideo">
     <field name="name"  family="p" qualifier="info:nm" ttl="11"/>
     <field name="dateOfBirth"  family="p" qualifier="info:db" ttl="12"/>
     <field name="ssn"  family="p" qualifier="info:sn" ttl="13"/>

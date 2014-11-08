@@ -91,18 +91,18 @@
         <artifactId>jackson-mapper-asl</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-        <!-- Gora Dependencies -->
+        <!-- Gora Dependencies 
         <dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-core</artifactId>
             <version>0.6-SNAPSHOT</version>
-        </dependency>
-        <!-- GORA - DYNAMO -->
+        </dependency>-->
+        <!-- GORA - DYNAMO 
         <dependency>
             <groupId>org.apache.gora</groupId>
             <artifactId>gora-dynamodb</artifactId>
             <version>0.6-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
         <!-- GORA - MONGO 
         <dependency>
             <groupId>org.apache.gora</groupId>
